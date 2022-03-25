@@ -51,8 +51,12 @@ public class InvoiceServiceTest {
 		InvoiceSummary expectedInvoiceSummary = new InvoiceSummary(rides.length, 38.1);
 		Assert.assertEquals(expectedInvoiceSummary, invoiceSummary);
 	}
-	
 
+	/**
+	 * when userid given it should return invoice summary of that user
+	 * 
+	 * @throws InvoiceGeneratorException
+	 */
 	@Test
 	public void givenUserId_ShouldReturnInvoiceSummary() throws InvoiceGeneratorException {
 		String[] userId = { "user1", "user2", "user3" };
@@ -62,6 +66,24 @@ public class InvoiceServiceTest {
 		invoiceGenerator.addRideToRepository(userId, rides);
 		InvoiceSummary summary = invoiceGenerator.invoiceForUser(userId[2]);
 		InvoiceSummary expectedInvoiceSummary = new InvoiceSummary(rides[2].length, 165.0);
+		Assert.assertEquals(expectedInvoiceSummary, summary);
+	}
+
+	/**
+	 * here i have given two types od rides such as normal ride and premium ride
+	 * then we have to calculate fare according to given ride
+	 * 
+	 * @throws InvoiceGeneratorException
+	 */
+	@Test
+	public void givenPremiumAndNormalRideForUserId_ShouldReturnInvoiceSummary() throws InvoiceGeneratorException {
+		String[] userId = { "user1", "user2", "user3" };
+		Ride[][] rides = { { new Ride(5.0, 12, "PREMIUM"), new Ride(2.5, 6, "NORMAL") },
+				{ new Ride(3.0, 5, "PREMIUM"), new Ride(0.01, 1, "PREMIUM") },
+				{ new Ride(10.0, 15, "NORMAL"), new Ride(2, 30, "PREMIUM") } };
+		invoiceGenerator.addRideToRepository(userId, rides);
+		InvoiceSummary summary = invoiceGenerator.invoiceForUser(userId[2]);
+		InvoiceSummary expectedInvoiceSummary = new InvoiceSummary(rides[2].length, 205.0);
 		Assert.assertEquals(expectedInvoiceSummary, summary);
 	}
 
